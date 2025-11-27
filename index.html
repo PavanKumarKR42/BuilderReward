@@ -226,6 +226,16 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
+    .profile-pfp {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      object-fit: cover;
+    }
+
     .profile-name {
       font-size: 20px;
       font-weight: 800;
@@ -438,6 +448,7 @@
 
     <div class="result-container" id="resultContainer">
       <div class="profile-header">
+        <img class="profile-pfp" id="profilePfp" src="" alt="Profile" />
         <div class="profile-name" id="displayName">—</div>
         <div class="profile-username" id="username">—</div>
       </div>
@@ -512,6 +523,7 @@
     const walletAddress = document.getElementById('walletAddress');
     const calculateBtn = document.getElementById('calculateBtn');
     const resultContainer = document.getElementById('resultContainer');
+    const profilePfp = document.getElementById('profilePfp');
     const displayName = document.getElementById('displayName');
     const username = document.getElementById('username');
     const rewardAmount = document.getElementById('rewardAmount');
@@ -639,7 +651,18 @@
           throw new Error('No Farcaster profile found for this address');
         }
 
-        return users[0];
+        const user = users[0];
+        
+        // Return user data including pfp_url
+        return {
+          fid: user.fid,
+          username: user.username,
+          displayName: user.display_name || user.username,
+          pfpUrl: user.pfp_url || '',
+          followerCount: user.follower_count || 0,
+          followingCount: user.following_count || 0,
+          score: user.score || 0
+        };
       } catch (error) {
         console.error('Neynar fetch error:', error);
         throw error;
@@ -795,11 +818,22 @@
           fid: userFid,
           username: userUsername,
           displayName: userDisplayName,
+          pfpUrl: profile.pfpUrl,
           score: userScore,
           rank: userRank,
           tier: userTier,
           reward: reward
         };
+
+        // Set profile image
+        if (profile.pfpUrl) {
+          profilePfp.src = profile.pfpUrl;
+          profilePfp.style.display = 'block';
+        } else {
+          // Use a default placeholder if no pfp
+          profilePfp.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect width="80" height="80" fill="%238b5cf6"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="32" fill="white"%3E' + userDisplayName.charAt(0).toUpperCase() + '%3C/text%3E%3C/svg%3E';
+          profilePfp.style.display = 'block';
+        }
 
         displayName.textContent = userDisplayName;
         username.textContent = `@${userUsername}`;
