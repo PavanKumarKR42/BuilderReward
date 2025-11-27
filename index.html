@@ -487,8 +487,8 @@
     import { farcasterMiniApp } from 'https://esm.sh/@farcaster/miniapp-wagmi-connector';
 
     // API Configuration
-    const NEYNAR_API_KEY = 'NEYNAR_API_DOCS';
-    const TALENT_API_BASE = 'https://api.talentprotocol.com/api/v2';
+    const NEYNAR_API_KEY = '20FEAD29-CB14-438B-8309-868BA126B594';
+    const TALENT_API_KEY = '2026c36474af407746a5d5ca5afeae2db1b0116c8494e0698e72a69b3651'; // Replace with your actual Talent Protocol API key
 
     // Reward Pool Constants
     const TOTAL_REWARD_POOL = 100000000;
@@ -650,18 +650,18 @@
     async function fetchBuilderScore(fidValue) {
       try {
         const response = await fetch(
-          `${TALENT_API_BASE}/passports/${fidValue}`,
+          `https://api.talentprotocol.com/farcaster/scores?fids=${fidValue}`,
           {
             headers: {
               'accept': 'application/json',
-              'X-API-KEY': 'YOUR_TALENT_API_KEY' // Replace with actual key if needed
+              'X-API-KEY': TALENT_API_KEY
             }
           }
         );
 
         if (!response.ok) {
-          if (response.status === 404) {
-            return null; // No builder score found
+          if (response.status === 404 || response.status === 401) {
+            return null; // No builder score found or unauthorized
           }
           throw new Error(`Talent API error: ${response.status}`);
         }
@@ -669,9 +669,19 @@
         const data = await response.json();
         console.log('Talent Protocol response:', data);
 
+        // Check if scores array exists and has data
+        if (!data.scores || data.scores.length === 0) {
+          return null; // No scores found for this FID
+        }
+
+        // Get the first score (or filter by scorer_slug if needed)
+        const scoreData = data.scores[0];
+
         return {
-          score: data.passport?.builder_score?.points || 0,
-          rank: data.passport?.builder_score?.rank || null
+          score: scoreData.points || 0,
+          rank: scoreData.rank_position || null,
+          lastCalculated: scoreData.last_calculated_at,
+          slug: scoreData.slug
         };
       } catch (error) {
         console.error('Talent Protocol fetch error:', error);
