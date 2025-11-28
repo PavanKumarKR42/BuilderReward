@@ -343,7 +343,7 @@ export default function BuilderValueCalculator() {
       const shareUrl = `https://builder-reward.vercel.app`;
 
       await sdk.actions.composeCast({
-        text: `My Builder Market Value is ${formatCurrency(userData.reward)}!\n\n Check yours!`,
+        text: `My value in Builder Market is ${formatCurrency(userData.reward)}!\n\n Check yours!`,
         embeds: [shareUrl]
       });
 
