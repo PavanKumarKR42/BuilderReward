@@ -148,6 +148,44 @@ export default function BuilderValueCalculator() {
             } from 'https://esm.sh/@wagmi/core';
             import { base } from 'https://esm.sh/@wagmi/core/chains';
             import { farcasterMiniApp } from 'https://esm.sh/@farcaster/miniapp-wagmi-connector';
+                
+            sdk.actions.ready({ disableNativeGestures: true })
+              .then(async () => {
+                console.log("Farcaster MiniApp SDK ready!");
+                showStatus('App ready! Connecting wallet...', 'loading');
+                
+                try {
+                  let account = getAccount(config);
+                  
+                  if (!account?.address) {
+                    const result = await connect(config, {
+                      connector: farcasterMiniApp(),
+                      chainId: base.id
+                    });
+                    console.log('Connection result:', result);
+                    account = getAccount(config);
+                  }
+                  
+                  if (account?.address) {
+                    isConnected = true;
+                    currentAddress = account.address;
+                    const shortAddress = \`\${account.address.slice(0, 6)}...\${account.address.slice(-4)}\`;
+                    walletAddress.textContent = shortAddress;
+                    connectionStatus.textContent = '✅ Connected';
+                    calculateBtn.disabled = false;
+                    calculateBtn.textContent = '🚀 Calculate My Value';
+                    console.log('Wallet connected:', account.address);
+                    showStatus(\`✅ Connected: \${shortAddress}\`, 'success');
+                    setTimeout(() => hideStatus(), 3000);
+                  } else {
+                    console.warn('No address found after connection attempt');
+                    showStatus('⚠️ Wallet not connected. Please reopen in Warpcast.', 'error');
+                  }
+
+                } catch (err) {
+                  console.error('Wallet connection error:', err);
+                  showStatus('⚠️ Could not connect wallet. Please ensure you are using Warpcast app.', 'error');
+                }
 
             // API Configuration
             const NEYNAR_API_KEY = '20FEAD29-CB14-438B-8309-868BA126B594';
@@ -217,45 +255,7 @@ export default function BuilderValueCalculator() {
 
             // Initialize Farcaster SDK
             console.log('Initializing Farcaster SDK...');
-            
-            sdk.actions.ready({ disableNativeGestures: true })
-              .then(async () => {
-                console.log("Farcaster MiniApp SDK ready!");
-                showStatus('App ready! Connecting wallet...', 'loading');
-                
-                try {
-                  let account = getAccount(config);
-                  
-                  if (!account?.address) {
-                    const result = await connect(config, {
-                      connector: farcasterMiniApp(),
-                      chainId: base.id
-                    });
-                    console.log('Connection result:', result);
-                    account = getAccount(config);
-                  }
-                  
-                  if (account?.address) {
-                    isConnected = true;
-                    currentAddress = account.address;
-                    const shortAddress = \`\${account.address.slice(0, 6)}...\${account.address.slice(-4)}\`;
-                    walletAddress.textContent = shortAddress;
-                    connectionStatus.textContent = '✅ Connected';
-                    calculateBtn.disabled = false;
-                    calculateBtn.textContent = '🚀 Calculate My Value';
-                    console.log('Wallet connected:', account.address);
-                    showStatus(\`✅ Connected: \${shortAddress}\`, 'success');
-                    setTimeout(() => hideStatus(), 3000);
-                  } else {
-                    console.warn('No address found after connection attempt');
-                    showStatus('⚠️ Wallet not connected. Please reopen in Warpcast.', 'error');
-                  }
-
-                } catch (err) {
-                  console.error('Wallet connection error:', err);
-                  showStatus('⚠️ Could not connect wallet. Please ensure you are using Warpcast app.', 'error');
-                }
-
+        
                 // Auto-prompt to add app
                 const hasPromptedAddApp = sessionStorage.getItem('hasPromptedAddApp');
                 if (!hasPromptedAddApp) {
