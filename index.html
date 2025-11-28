@@ -482,7 +482,7 @@
     <div class="container">
       <div class="header">
         <h1>Builder Value</h1>
-        <div class="subtitle">Calculate Your Market Worth</div>
+        <div class="subtitle">Calculate Your Worth In Builder Market</div>
       </div>
 
       <div class="wallet-section">
@@ -948,13 +948,11 @@
           showStatus('<span class="loader"></span>Opening cast composer...', 'loading');
 
           await sdk.actions.composeCast({
-            text: `💎 My Builder Market Value: ${formatCurrency(userData.reward)}!
+            text: `💎 My value in builder Market is ${formatCurrency(userData.reward)}!
 
-  🏆 Rank: #${userData.rank.toLocaleString()}
-  ⚡ Score: ${userData.score.toLocaleString()}
-  🎯 Tier ${userData.tier}
+ Check Yours
 
-  Calculate your worth from the $100M reward pool! 🚀`,
+`,
             embeds: ["https://builder-reward.vercel.app/"]
           });
 
