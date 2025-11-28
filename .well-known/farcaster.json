@@ -11,7 +11,7 @@
     "homeUrl": "https://builder-reward.vercel.app",
     "imageUrl": "https://builder-reward.vercel.app/image.png",
     "buttonTitle": "Check this out",
-    "splashImageUrl": "https://builder-reward.vercel.app/splash.splash.gif",
+    "splashImageUrl": "https://builder-reward.vercel.app/splash.gif",
     "splashBackgroundColor": "#eeccff",
     "webhookUrl": "https://builder-reward.vercel.app/api/webhook"
   }
