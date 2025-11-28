@@ -1,6 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { createConfig, connect, getAccount, http } from '@wagmi/core';
+import { base } from '@wagmi/core/chains';
+import { farcasterMiniApp } from '@farcaster/miniapp-wagmi-connector';
+import { sdk } from '@farcaster/miniapp-sdk';
 
 export default function BuilderValueCalculator() {
   const [isConnected, setIsConnected] = useState(false);
@@ -37,12 +41,6 @@ export default function BuilderValueCalculator() {
     // Initialize Farcaster SDK
     const initializeSdk = async () => {
       try {
-        const { sdk } = await import('@farcaster/miniapp-sdk');
-        const { createConfig, connect, getAccount } = await import('@wagmi/core');
-        const { base } = await import('@wagmi/core/chains');
-        const { http } = await import('@wagmi/core');
-        const { farcasterMiniApp } = await import('@farcaster/miniapp-wagmi-connector');
-
         const config = createConfig({
           chains: [base],
           transports: { [base.id]: http() }
