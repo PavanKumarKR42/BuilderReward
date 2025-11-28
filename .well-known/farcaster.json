@@ -1,0 +1,18 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjI4NDcxMywidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDBDN2FmZDk5OEY1MDY5ZkM1RTMxZWVmREM2RkZBODdlMzExYWIyM0MifQ",
+    "payload": "eyJkb21haW4iOiJidWlsZGVyLXJld2FyZC52ZXJjZWwuYXBwIn0",
+    "signature": "UHePaNtsTCcHNUwrZbN/0M3TKELznzWIbBOH242kjOZx7xSHuQ7O86hWjJj+gaZmXGL24J6ZjjAeDFb7RHum6Bs="
+  },
+  "frame": {
+    "version": "1",
+    "name": "Example Frame",
+    "iconUrl": "https://builder-reward.vercel.app/icon.png",
+    "homeUrl": "https://builder-reward.vercel.app",
+    "imageUrl": "https://builder-reward.vercel.app/image.png",
+    "buttonTitle": "Check this out",
+    "splashImageUrl": "https://builder-reward.vercel.app/splash.png",
+    "splashBackgroundColor": "#eeccff",
+    "webhookUrl": "https://builder-reward.vercel.app/api/webhook"
+  }
+}
