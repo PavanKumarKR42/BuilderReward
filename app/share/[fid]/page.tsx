@@ -13,6 +13,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { fid } = await params;
   const sp = await searchParams;
+  
+  // If share_image_url is passed, use it; otherwise generate from FID
   const shareImageUrl = sp?.share_image_url
     ? Array.isArray(sp.share_image_url)
       ? sp.share_image_url[0]
@@ -39,6 +41,7 @@ export default function SharePage({
   params: { fid: string };
   searchParams?: { [key: string]: string | string[] };
 }) {
+  // If share_image_url is passed, use it; otherwise generate from FID
   const shareImageUrl = searchParams?.share_image_url
     ? Array.isArray(searchParams.share_image_url)
       ? searchParams.share_image_url[0]
