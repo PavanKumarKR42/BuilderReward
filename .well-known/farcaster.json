@@ -14,15 +14,12 @@
     "splashImageUrl": "https://builder-reward.vercel.app/splash.gif",
     "splashBackgroundColor": "#eeccff",
     "webhookUrl": "https://builder-reward.vercel.app/api/webhook",
-    "primaryCategory": "Checker",
+    "primaryCategory": "social",
      "description": "If you are in the top 10k builders across the onchain. Check your worth in the builder market!",
       "tags": [
       "neynar",
-      "Builder",
-      "earn",
-      "Checker",
-      "base",
-      "talent"
+      "Builder"
+      
     ]
   }
 }
