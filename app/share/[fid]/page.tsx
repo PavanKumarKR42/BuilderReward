@@ -4,36 +4,32 @@ import { getMiniAppEmbedMetadata } from '../../../lib/utils';
 
 export const revalidate = 300;
 
-export async function generateMetadata({ params }: { params: Promise<{ fid: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: any): Promise<Metadata> {
   const { fid } = await params;
-  const imageUrl = `${APP_URL}/api/opengraph-image?fid=${fid}`;
+  const shareImage = searchParams?.share_image_url || `${APP_URL}/api/opengraph-image?fid=${fid}`;
 
   return {
     title: `${APP_NAME} - Share`,
     openGraph: {
       title: APP_NAME,
       description: APP_DESCRIPTION,
-      images: [imageUrl]
+      images: [shareImage]
     },
     other: {
-      'fc:frame': JSON.stringify(getMiniAppEmbedMetadata(imageUrl))
+      'fc:frame': JSON.stringify(getMiniAppEmbedMetadata(shareImage))
     }
   };
 }
 
-export default function SharePage({ params }: { params: { fid: string } }) {
+export default function SharePage({ params, searchParams }: { params: { fid: string }, searchParams?: { [key: string]: string | string[] } }) {
   const fid = params.fid;
-  const urlSearch = typeof window !== 'undefined' ? window.location.search : '';
-  const urlParams = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(urlSearch) : null;
-  const customImage = urlParams?.get('share_image_url') || `${APP_URL}/api/opengraph-image?fid=${fid}`;
+  const customImage = (searchParams && (searchParams.share_image_url as string)) || `${APP_URL}/api/opengraph-image?fid=${fid}`;
 
+  // Render only the preview image (no extra links/content) so embed preview is clean.
   return (
     <html>
-      <body style={{ fontFamily: 'Inter, Arial, sans-serif', background: '#071029', color: 'white', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center' }}>
-          <img src={customImage} alt={`Share image for ${fid}`} style={{ width: 900, height: 'auto', borderRadius: 8, boxShadow: '0 10px 30px rgba(0,0,0,0.6)' }} />
-          <div style={{ marginTop: 16, color: 'rgba(255,255,255,0.8)' }}>Open this page in Warpcast to preview the embed. Share URL: <code style={{ color: 'white' }}>{`${APP_URL}/share/${fid}`}</code></div>
-        </div>
+      <body style={{ margin: 0, background: '#071029', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+        <img src={customImage} alt={`Share image for ${fid}`} style={{ width: '100%', maxWidth: 1200, height: 'auto', display: 'block' }} />
       </body>
     </html>
   );
