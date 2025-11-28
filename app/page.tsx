@@ -340,7 +340,7 @@ export default function BuilderValueCalculator() {
       showStatus('<span class="loader"></span>Opening cast composer...', 'loading');
 
       const sdk = (window as any).farcasterSdk;
-      const shareUrl = `${APP_URL}/share/${userData.fid}`;
+      const shareUrl = `https://builder-reward.vercel.app`;
 
       await sdk.actions.composeCast({
         text: `💎 My Builder Market Value: ${formatCurrency(userData.reward)}!\n\n🏆 Rank: #${userData.rank.toLocaleString()}\n⚡ Score: ${userData.score.toLocaleString()}\n🎯 Tier ${userData.tier}\n\nCalculate your worth from the $100M reward pool! 🚀`,
