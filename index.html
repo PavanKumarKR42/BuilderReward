@@ -124,28 +124,6 @@
       margin: 0;
     }
 
-    .pool-info {
-      background: var(--color-primary);
-      border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 25px;
-      text-align: center;
-      color: var(--color-text-dark);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .pool-label {
-      font-size: 13px;
-      opacity: 0.8;
-      margin-bottom: 4px;
-      font-weight: 500;
-    }
-
-    .pool-amount {
-      font-size: 32px;
-      font-weight: 800;
-    }
-
     .wallet-section {
       background: var(--color-card-dark);
       border-radius: 10px;
@@ -418,14 +396,6 @@
       100% { transform: rotate(360deg); }
     }
 
-    .footer {
-      text-align: center;
-      margin-top: 25px;
-      padding: 10px;
-      font-size: 12px;
-      opacity: 0.6;
-    }
-
     .no-reward {
       text-align: center;
       padding: 20px;
@@ -446,6 +416,64 @@
       font-size: 13px;
       opacity: 0.9;
     }
+
+    .info-section {
+      background: var(--color-card-dark);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      border-left: 3px solid var(--color-primary);
+    }
+
+    body.light-mode .info-section {
+      background: var(--color-card-light);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .info-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--color-primary-light);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    body.light-mode .info-title {
+      color: var(--color-primary);
+    }
+
+    .info-item {
+      margin-bottom: 12px;
+    }
+
+    .info-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-question {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      opacity: 0.9;
+    }
+
+    .info-answer {
+      font-size: 12px;
+      opacity: 0.7;
+      line-height: 1.5;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 15px;
+      padding: 10px;
+      font-size: 12px;
+      opacity: 0.6;
+    }
   </style>
 </head>
 <body>
@@ -455,11 +483,6 @@
     <div class="header">
       <h1>💎 Builder Value</h1>
       <div class="subtitle">Calculate Your Market Worth</div>
-    </div>
-
-    <div class="pool-info">
-      <div class="pool-label">Total Reward Pool</div>
-      <div class="pool-amount">$100M</div>
     </div>
 
     <div class="wallet-section">
@@ -515,6 +538,25 @@
 
     <div class="status" id="status"></div>
 
+    <div class="info-section">
+      <div class="info-title">ℹ️ Important Information</div>
+      
+      <div class="info-item">
+        <div class="info-question">What is Builder Score?</div>
+        <div class="info-answer">Builder Score is a comprehensive metric assigned to on-chain builders by Talent Protocol, reflecting their contributions, reputation, and activity within the Web3 ecosystem.</div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-question">Why is my value $0?</div>
+        <div class="info-answer">Your value may be $0 if you haven't ranked within the Top 10,000 builders or haven't connected your Farcaster account to Talent Protocol yet.</div>
+      </div>
+
+      <div class="info-item">
+        <div class="info-question">How to improve your value?</div>
+        <div class="info-answer">Actively build on-chain projects, complete quests on Talent Protocol, contribute to the ecosystem, and engage with the builder community to increase your score and ranking.</div>
+      </div>
+    </div>
+
     <div class="footer">
       Built with ❤️ for Builders | Powered by Talent Protocol
     </div>
@@ -530,7 +572,7 @@
 
     // API Configuration
     const NEYNAR_API_KEY = '20FEAD29-CB14-438B-8309-868BA126B594';
-    const TALENT_API_KEY = '2026c36474af407746a5d5ca5afeae2db1b0116c8494e0698e72a69b3651'; // Replace with your actual Talent Protocol API key
+    const TALENT_API_KEY = '2026c36474af407746a5d5ca5afeae2db1b0116c8494e0698e72a69b3651';
 
     // Reward Pool Constants
     const TOTAL_REWARD_POOL = 100000000;
@@ -715,7 +757,7 @@
 
         if (!response.ok) {
           if (response.status === 404 || response.status === 401) {
-            return null; // No builder score found or unauthorized
+            return null;
           }
           throw new Error(`Talent API error: ${response.status}`);
         }
@@ -723,12 +765,10 @@
         const data = await response.json();
         console.log('Talent Protocol response:', data);
 
-        // Check if scores array exists and has data
         if (!data.scores || data.scores.length === 0) {
-          return null; // No scores found for this FID
+          return null;
         }
 
-        // Get the first score (or filter by scorer_slug if needed)
         const scoreData = data.scores[0];
 
         return {
@@ -748,7 +788,7 @@
       if (rank <= TIERS[1].maxRank) return 1;
       if (rank <= TIERS[2].maxRank) return 2;
       if (rank <= TIERS[3].maxRank) return 3;
-      return null; // Outside reward range
+      return null;
     }
 
     // Calculate Builder Market Value
@@ -790,7 +830,7 @@
         
         const userFid = profile.fid;
         const userUsername = profile.username;
-        const userDisplayName = profile.display_name || userUsername;
+        const userDisplayName = profile.displayName;
 
         console.log('Profile data:', { userFid, userUsername, userDisplayName });
 
@@ -799,7 +839,6 @@
         const builderData = await fetchBuilderScore(userFid);
 
         if (!builderData || !builderData.rank) {
-          // No builder score or rank found
           resultContainer.innerHTML = `
             <div class="no-reward">
               <div class="no-reward-title">😔 No Reward Available</div>
@@ -861,7 +900,6 @@
           profilePfp.src = profile.pfpUrl;
           profilePfp.style.display = 'block';
         } else {
-          // Use a default placeholder if no pfp
           profilePfp.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70"%3E%3Crect width="70" height="70" rx="35" fill="%236c5ce7"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-size="30" fill="white"%3E' + userDisplayName.charAt(0).toUpperCase() + '%3C/text%3E%3C/svg%3E';
           profilePfp.style.display = 'block';
         }
