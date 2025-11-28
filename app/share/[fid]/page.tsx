@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 import { APP_URL, APP_NAME, APP_DESCRIPTION } from '../../../lib/constants';
 import { getMiniAppEmbedMetadata } from '../../../lib/utils';
 
@@ -33,7 +32,32 @@ export async function generateMetadata({
   };
 }
 
-export default function SharePage() {
-  // Redirect to home page
-  redirect('/');
+export default function SharePage({
+  params,
+  searchParams,
+}: {
+  params: { fid: string };
+  searchParams?: { [key: string]: string | string[] };
+}) {
+  const shareImageUrl = searchParams?.share_image_url
+    ? Array.isArray(searchParams.share_image_url)
+      ? searchParams.share_image_url[0]
+      : searchParams.share_image_url
+    : `${APP_URL}/api/opengraph-image?fid=${params.fid}`;
+
+  // Render only the preview image
+  return (
+    <html>
+      <head>
+        <title>{APP_NAME} - Share</title>
+      </head>
+      <body style={{ margin: 0, padding: 0, background: '#000' }}>
+        <img
+          src={shareImageUrl}
+          alt={`Share image for ${params.fid}`}
+          style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
+        />
+      </body>
+    </html>
+  );
 }

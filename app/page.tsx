@@ -341,11 +341,11 @@ export default function BuilderValueCalculator() {
 
       const sdk = (window as any).farcasterSdk;
       const imageUrl = `${APP_URL}/api/opengraph-image?fid=${userData.fid}`;
-      const previewUrl = `${APP_URL}/preview/${userData.fid}?share_image_url=${encodeURIComponent(imageUrl)}`;
+      const shareUrl = `${APP_URL}/share/${userData.fid}?share_image_url=${encodeURIComponent(imageUrl)}`;
 
       await sdk.actions.composeCast({
         text: `💎 My Builder Market Value: ${formatCurrency(userData.reward)}!\n\n🏆 Rank: #${userData.rank.toLocaleString()}\n⚡ Score: ${userData.score.toLocaleString()}\n🎯 Tier ${userData.tier}\n\nCalculate your worth from the $100M reward pool! 🚀`,
-        embeds: [previewUrl]
+        embeds: [shareUrl]
       });
 
       showStatus('Cast composer opened!', 'success');
